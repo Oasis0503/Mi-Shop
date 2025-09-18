@@ -8,4 +8,9 @@ export default defineConfig({
       jsxRuntime: 'classic',
     }),
   ],
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
 })

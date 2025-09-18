@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
 import './index.css'
+import { AppProviders } from '@/app/providers'
+import AppRoutes from '@/app/routes'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppProviders>
+      <AppRoutes />
+    </AppProviders>
   </React.StrictMode>,
   document.getElementById('root') as HTMLElement
 )
