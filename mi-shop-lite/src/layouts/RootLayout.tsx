@@ -1,6 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { TopNavbar } from '../components'
+import { DropdownNavBar } from '../components/DropdownNavBar'
 
 export default function RootLayout() {
   return (
@@ -14,6 +15,7 @@ export default function RootLayout() {
       padding: 0
     }}>
       <TopNavbar />
+      <DropdownNavBar />
       <main style={{ 
         flex: 1,
         padding: '20px',

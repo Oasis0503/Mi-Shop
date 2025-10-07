@@ -11,6 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': '/src',
+      '@interfaces': '/src/types/interfaces.tsx',
     },
   },
 })
