@@ -4,79 +4,104 @@ import Dropdown from "@hi-ui/dropdown"
 import type { DropdownItem } from '@interfaces'
 
 export const DropdownNavBar: React.FC = () => {
+  const PLACEHOLDER = '/images/products/placeholder.svg'
+
+  const renderTitle = (name: string, src?: string) => (
+    <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <img
+        src={src || PLACEHOLDER}
+        alt={name}
+        style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, backgroundColor: '#f5f5f5' }}
+        onError={(e) => {
+          const img = e.currentTarget as HTMLImageElement
+          if (!img.src.includes('placeholder.svg')) {
+            img.src = PLACEHOLDER
+          }
+        }}
+      />
+      <span>{name}</span>
+    </span>
+  )
+
+  const createItem = (id: string, name: string, href: string, imageFile?: string): DropdownItem => ({
+    id,
+    href,
+    imageUrl: imageFile ? `/images/products/${imageFile}` : undefined,
+    title: renderTitle(name, imageFile ? `/images/products/${imageFile}` : undefined)
+  })
   // 导航菜单数据配置
   const navMenuData: DropdownItem[] = [
     {
       id: 'xiaomi-phone',
       title: 'Xiaomi手机',
       children: [
-        { id: 'mi17-pro-max', title: 'Xiaomi 17 Pro Max', href: '/products/mi17-pro-max' },
-        { id: 'mi17-pro', title: 'Xiaomi 17 Pro', href: '/products/mi17-pro' },
-        { id: 'mi17', title: 'Xiaomi 17', href: '/products/mi17' },
-        { id: 'mi15s-pro', title: 'Xiaomi 15S Pro', href: '/products/mi15s-pro' },
-        { id: 'civi5-pro', title: 'Xiaomi Civi 5 Pro', href: '/products/civi5-pro' },
-        { id: 'mix-flip2', title: 'Xiaomi MIX Flip 2', href: '/products/mix-flip2' }
+        createItem('mi17-pro-max', 'Xiaomi 17 Pro Max', '/products/mi17-pro-max', 'mi17-pro-max.jpg'),
+        createItem('mi17-pro', 'Xiaomi 17 Pro', '/products/mi17-pro', 'mi17-pro.png'),
+        createItem('mi17', 'Xiaomi 17', '/products/mi17', 'mi17.png'),
+        createItem('mi15s-pro', 'Xiaomi 15S Pro', '/products/mi15s-pro', 'mi15s-pro.png'),
+        createItem('civi5-pro', 'Xiaomi Civi 5 Pro', '/products/civi5-pro', 'civi5-pro.png'),
+        createItem('mix-flip2', 'Xiaomi MIX Flip 2', '/products/mix-flip2', 'mix-flip2.png')
       ]
     },
     {
       id: 'redmi-phone',
       title: 'REDMI手机',
       children: [
-        { id: 'redmi-k80', title: 'Redmi K80', href: '/products/redmi-k80' },
-        { id: 'redmi-note15', title: 'Redmi Note 15', href: '/products/redmi-note15' },
-        { id: 'redmi-turbo3', title: 'Redmi Turbo 3', href: '/products/redmi-turbo3' },
-        { id: 'redmi-k70', title: 'Redmi K70', href: '/products/redmi-k70' }
+        createItem('redmi-k80', 'Redmi K80', '/products/redmi-k80', 'redmi-k80.png'),
+        createItem('redmi-note15', 'Redmi Note 15', '/products/redmi-note15', 'redmi-note15.png'),
+        createItem('redmi-turbo3', 'Redmi Turbo 3', '/products/redmi-turbo3', 'redmi-turbo3.png'),
+        createItem('redmi-k70', 'Redmi K70', '/products/redmi-k70', 'redmi-k70.png')
       ]
     },
     {
       id: 'tv',
       title: '电视',
       children: [
-        { id: 'mi-tv-s85', title: '小米电视 S85', href: '/products/mi-tv-s85' },
-        { id: 'mi-tv-s75', title: '小米电视 S75', href: '/products/mi-tv-s75' },
-        { id: 'mi-tv-s65', title: '小米电视 S65', href: '/products/mi-tv-s65' },
-        { id: 'mi-tv-s55', title: '小米电视 S55', href: '/products/mi-tv-s55' },
-        { id: 'mi-tv-a85', title: '小米电视 A85', href: '/products/mi-tv-a85' }
+        createItem('mi-tv-s85', '小米电视 S85', '/products/mi-tv-s85', 'mi-tv-s85.png'),
+        createItem('mi-tv-s75', '小米电视 S75', '/products/mi-tv-s75', 'mi-tv-s75.png'),
+        createItem('mi-tv-s65', '小米电视 S65', '/products/mi-tv-s65', 'mi-tv-s65.png'),
+        createItem('mi-tv-s55', '小米电视 S55', '/products/mi-tv-s55', 'mi-tv-s55.png'),
+        createItem('mi-tv-a85', '小米电视 A85', '/products/mi-tv-a85', 'mi-tv-a85.png')
       ]
     },
     {
       id: 'laptop',
       title: '笔记本',
       children: [
-        { id: 'redmi-book-pro16', title: 'Redmi Book Pro 16', href: '/products/redmi-book-pro16' },
-        { id: 'redmi-book-pro15', title: 'Redmi Book Pro 15', href: '/products/redmi-book-pro15' },
-        { id: 'redmi-book-pro14', title: 'Redmi Book Pro 14', href: '/products/redmi-book-pro14' },
-        { id: 'xiaomi-book-pro16', title: 'Xiaomi Book Pro 16', href: '/products/xiaomi-book-pro16' }
+        createItem('redmi-book-pro16', 'Redmi Book Pro 16', '/products/redmi-book-pro16', 'redmi-book-pro16.png'),
+        createItem('redmi-book-pro15', 'Redmi Book Pro 15', '/products/redmi-book-pro15', 'redmi-book-pro15.png'),
+        createItem('redmi-book-pro14', 'Redmi Book Pro 14', '/products/redmi-book-pro14', 'redmi-book-pro14.png'),
+        createItem('xiaomi-book-pro16', 'Xiaomi Book Pro 16', '/products/xiaomi-book-pro16', 'xiaomi-book-pro16.png')
       ]
     },
     {
       id: 'tablet',
       title: '平板',
       children: [
-        { id: 'xiaomi-pad7-pro', title: 'Xiaomi Pad 7 Pro', href: '/products/xiaomi-pad7-pro' },
-        { id: 'xiaomi-pad7', title: 'Xiaomi Pad 7', href: '/products/xiaomi-pad7' },
-        { id: 'xiaomi-pad6s-pro', title: 'Xiaomi Pad 6S Pro', href: '/products/xiaomi-pad6s-pro' },
-        { id: 'xiaomi-pad6-pro', title: 'Xiaomi Pad 6 Pro', href: '/products/xiaomi-pad6-pro' }
+        createItem('xiaomi-pad7-pro', 'Xiaomi Pad 7 Pro', '/products/xiaomi-pad7-pro', 'xiaomi-pad7-pro.png'),
+        createItem('xiaomi-pad7', 'Xiaomi Pad 7', '/products/xiaomi-pad7', 'xiaomi-pad7.png'),
+        createItem('xiaomi-pad6s-pro', 'Xiaomi Pad 6S Pro', '/products/xiaomi-pad6s-pro', 'xiaomi-pad6s-pro.png'),
+        createItem('xiaomi-pad6-pro', 'Xiaomi Pad 6 Pro', '/products/xiaomi-pad6-pro', 'xiaomi-pad6-pro.png')
       ]
     },
     {
       id: 'home-appliances',
       title: '家电',
       children: [
-        { id: 'air-conditioner', title: '空调', href: '/products/air-conditioner' },
-        { id: 'refrigerator', title: '冰箱', href: '/products/refrigerator' },
-        { id: 'washing-machine', title: '洗衣机', href: '/products/washing-machine' },
-        { id: 'vacuum-cleaner', title: '扫地机器人', href: '/products/vacuum-cleaner' }
+        createItem('air-conditioner', '空调', '/products/air-conditioner', 'air-conditioner.png'),
+        createItem('refrigerator', '冰箱', '/products/refrigerator', 'refrigerator.png'),
+        createItem('washing-machine', '洗衣机', '/products/washing-machine', 'washing-machine.png'),
+        createItem('vacuum-cleaner', '扫地机器人', '/products/vacuum-cleaner', 'vacuum-cleaner.png')
       ]
     },
     {
       id: 'router',
       title: '路由器',
       children: [
-        { id: 'ax9000', title: 'Xiaomi AX9000', href: '/products/ax9000' },
-        { id: 'ax6000', title: 'Xiaomi AX6000', href: '/products/ax6000' },
-        { id: 'ax3000', title: 'Xiaomi AX3000', href: '/products/ax3000' },
-        { id: 'ax1800', title: 'Xiaomi AX1800', href: '/products/ax1800' }
+        createItem('ax9000', 'Xiaomi AX9000', '/products/ax9000', 'ax9000.png'),
+        createItem('ax6000', 'Xiaomi AX6000', '/products/ax6000', 'ax6000.png'),
+        createItem('ax3000', 'Xiaomi AX3000', '/products/ax3000', 'ax3000.png'),
+        createItem('ax1800', 'Xiaomi AX1800', '/products/ax1800', 'ax1800.png')
       ]
     },
     {
@@ -172,8 +197,8 @@ export const DropdownNavBar: React.FC = () => {
                   transition: 'all 0.3s ease'
                 }}
                 overlayStyle={{
-                  minWidth: '200px',
-                  maxWidth: '300px',
+                  minWidth: '250px',
+                  maxWidth: '350px',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                   borderRadius: '8px',
                   border: '1px solid #e8e8e8'
@@ -183,7 +208,10 @@ export const DropdownNavBar: React.FC = () => {
                   fontSize: '14px',
                   color: '#333',
                   borderBottom: '1px solid #f0f0f0',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
                 }}
                 activeItemStyle={{
                   backgroundColor: '#fff7f0',
