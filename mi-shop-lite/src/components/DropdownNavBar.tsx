@@ -1,10 +1,11 @@
 import React from 'react'
 // @ts-expect-error - HiUI type declarations issue
-import Dropdown from "@hi-ui/dropdown"
+import Menu from "@hi-ui/menu"
 import type { DropdownItem } from '@interfaces'
 
 export const DropdownNavBar: React.FC = () => {
   const PLACEHOLDER = '/images/products/placeholder.svg'
+  const [activeMenuId, setActiveMenuId] = React.useState<string | number | null>(null)
 
   const renderTitle = (name: string, src?: string) => (
     <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -127,19 +128,25 @@ export const DropdownNavBar: React.FC = () => {
   ]
 
   // 处理菜单项点击事件
-  const handleMenuClick = (item: DropdownItem) => {
-    if (item.href) {
-      if (item.href.startsWith('http')) {
-        window.open(item.href, '_blank', 'noopener,noreferrer')
-      } else {
-        window.location.href = item.href
+  const handleMenuItemClick = (id: string | number) => {
+    // 在所有 children 中按 id 查找 href
+    for (const group of navMenuData) {
+      if (!group.children) continue
+      const found = group.children.find((c) => c.id === id)
+      if (found && typeof (found as DropdownItem).href === 'string') {
+        const href = (found as DropdownItem).href as string
+        if (href.startsWith('http')) {
+          window.open(href, '_blank', 'noopener,noreferrer')
+        } else {
+          window.location.href = href
+        }
+        break
       }
     }
-    console.log('菜单项被点击:', item)
   }
 
   return (
-    <div className="dropdown-navbar">
+    <div className="dropdown-navbar" style={{ position: 'relative' }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -148,7 +155,9 @@ export const DropdownNavBar: React.FC = () => {
         height: '60px',
         borderBottom: '1px solid #e8e8e8',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-      }}>
+      }}
+      onMouseLeave={() => setActiveMenuId(null)}
+      >
         {/* 小米Logo */}
         <div style={{
           width: '48px',
@@ -174,50 +183,22 @@ export const DropdownNavBar: React.FC = () => {
         </div>
 
         {/* 导航菜单 */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '32px'
-        }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
           {navMenuData.map((menuItem) => (
-            <div key={menuItem.id}>
-              <Dropdown
-                data={menuItem.children || []}
-                title={menuItem.title}
-                onClick={handleMenuClick}
-                trigger="hover"
-                placement="bottom-start"
-                titleStyle={{
-                  color: '#333',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  padding: '8px 0',
-                  borderBottom: '2px solid transparent',
-                  transition: 'all 0.3s ease'
-                }}
-                overlayStyle={{
-                  minWidth: '250px',
-                  maxWidth: '350px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                  borderRadius: '8px',
-                  border: '1px solid #e8e8e8'
-                }}
-                itemStyle={{
-                  padding: '12px 16px',
-                  fontSize: '14px',
-                  color: '#333',
-                  borderBottom: '1px solid #f0f0f0',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px'
-                }}
-                activeItemStyle={{
-                  backgroundColor: '#fff7f0',
-                  color: '#ff6700'
-                }}
-              />
+            <div
+              key={menuItem.id}
+              onMouseEnter={() => setActiveMenuId(menuItem.id)}
+              style={{
+                color: '#333',
+                fontSize: '16px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                padding: '8px 0',
+                borderBottom: activeMenuId === menuItem.id ? '2px solid #ff6700' : '2px solid transparent',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              {menuItem.title}
             </div>
           ))}
         </div>
@@ -268,6 +249,31 @@ export const DropdownNavBar: React.FC = () => {
             </svg>
           </div>
         </div>
+        {/* 悬浮面板：横向 Menu */}
+        {activeMenuId && (
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 60,
+              backgroundColor: '#fff',
+              border: '1px solid #e8e8e8',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              borderRadius: 8,
+              padding: '12px 16px',
+              zIndex: 1000
+            }}
+            onMouseLeave={() => setActiveMenuId(null)}
+          >
+            <Menu
+              placement="horizontal"
+              // @ts-expect-error - HiUI type declarations issue
+              onClick={(id) => handleMenuItemClick(id as string | number)}
+              data={(navMenuData.find(g => g.id === activeMenuId)?.children || []) as unknown as { id: string | number; title: React.ReactNode }[]}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
