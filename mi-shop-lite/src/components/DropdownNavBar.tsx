@@ -1,45 +1,26 @@
 import React from 'react'
 // @ts-expect-error - HiUI type declarations issue
 import Menu from "@hi-ui/menu"
+import { CardItem } from './CardItem'
+import { NavTitle } from './NavTitle'
+import { MegaMenu } from './MegaMenu'
 import type { DropdownItem } from '@interfaces'
 
 export const DropdownNavBar: React.FC = () => {
   const PLACEHOLDER = '/images/products/placeholder.svg'
   const [activeMenuId, setActiveMenuId] = React.useState<string | number | null>(null)
+  const navTitleTextStyle: React.CSSProperties = {
+    color: '#333',
+    fontSize: '16px',
+    fontWeight: 500,
+    cursor: 'pointer',
+    padding: '8px 0',
+    borderBottom: '2px solid transparent',
+    transition: 'all 0.3s ease'
+  }
 
   const renderTitle = (name: string, src?: string, subtitle?: string) => (
-    <div className="dropdown-card" style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: 10,
-      width: 'clamp(160px, 14vw, 220px)',
-      padding: '12px 16px',
-      backgroundColor: '#fff'
-    }}>
-      <img
-        src={src || PLACEHOLDER}
-        alt={name}
-        style={{
-          width: 'clamp(110px, 9vw, 160px)',
-          height: 'auto',
-          aspectRatio: '1 / 1',
-          objectFit: 'cover',
-          borderRadius: 8,
-          backgroundColor: '#f5f5f5'
-        }}
-        onError={(e) => {
-          const img = e.currentTarget as HTMLImageElement
-          if (!img.src.includes('placeholder.svg')) {
-            img.src = PLACEHOLDER
-          }
-        }}
-      />
-      <span style={{ color: '#333', fontSize: 14, textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>{name}</span>
-      {subtitle ? (
-        <span style={{ color: '#ff6700', fontSize: 14, fontWeight: 600 }}>{subtitle}</span>
-      ) : null}
-    </div>
+    <CardItem name={name} imageSrc={src || PLACEHOLDER} placeholderSrc={PLACEHOLDER} subtitle={subtitle} />
   )
 
   const createItem = (id: string, name: string, href: string, imageFile?: string, subtitle?: string): DropdownItem => ({
@@ -66,66 +47,66 @@ export const DropdownNavBar: React.FC = () => {
       id: 'redmi-phone',
       title: 'REDMI手机',
       children: [
-        createItem('redmi-k80', 'Redmi K80', '/products/redmi-k80', 'redmi-k80.png'),
-        createItem('redmi-note15', 'Redmi Note 15', '/products/redmi-note15', 'redmi-note15.png'),
-        createItem('redmi-turbo3', 'Redmi Turbo 3', '/products/redmi-turbo3', 'redmi-turbo3.png'),
-        createItem('redmi-k70', 'Redmi K70', '/products/redmi-k70', 'redmi-k70.png')
+        createItem('redmi-k80', 'Redmi K80', '/products/redmi-k80', 'redmi-k80.png', '1999元起'),
+        createItem('redmi-note15', 'Redmi Note 15', '/products/redmi-note15', 'redmi-note15.png', '1999元起'),
+        createItem('redmi-turbo3', 'Redmi Turbo 3', '/products/redmi-turbo3', 'redmi-turbo3.png', '1999元起'),
+        createItem('redmi-k70', 'Redmi K70', '/products/redmi-k70', 'redmi-k70.png', '1999元起')
       ]
     },
     {
       id: 'tv',
       title: '电视',
       children: [
-        createItem('mi-tv-s85', '小米电视 S85', '/products/mi-tv-s85', 'mi-tv-s85.png'),
-        createItem('mi-tv-s75', '小米电视 S75', '/products/mi-tv-s75', 'mi-tv-s75.png'),
-        createItem('mi-tv-s65', '小米电视 S65', '/products/mi-tv-s65', 'mi-tv-s65.png'),
-        createItem('mi-tv-s55', '小米电视 S55', '/products/mi-tv-s55', 'mi-tv-s55.png'),
-        createItem('mi-tv-a85', '小米电视 A85', '/products/mi-tv-a85', 'mi-tv-a85.png')
+        createItem('mi-tv-s85', '小米电视 S85', '/products/mi-tv-s85', 'mi-tv-s85.png', '1999元起'),
+        createItem('mi-tv-s75', '小米电视 S75', '/products/mi-tv-s75', 'mi-tv-s75.png', '1999元起'),
+        createItem('mi-tv-s65', '小米电视 S65', '/products/mi-tv-s65', 'mi-tv-s65.png', '1999元起'),
+        createItem('mi-tv-s55', '小米电视 S55', '/products/mi-tv-s55', 'mi-tv-s55.png', '1999元起'),
+        createItem('mi-tv-a85', '小米电视 A85', '/products/mi-tv-a85', 'mi-tv-a85.png', '1999元起')
       ]
     },
     {
       id: 'laptop',
       title: '笔记本',
       children: [
-        createItem('redmi-book-pro16', 'Redmi Book Pro 16', '/products/redmi-book-pro16', 'redmi-book-pro16.png'),
-        createItem('redmi-book-pro15', 'Redmi Book Pro 15', '/products/redmi-book-pro15', 'redmi-book-pro15.png'),
-        createItem('redmi-book-pro14', 'Redmi Book Pro 14', '/products/redmi-book-pro14', 'redmi-book-pro14.png'),
-        createItem('xiaomi-book-pro16', 'Xiaomi Book Pro 16', '/products/xiaomi-book-pro16', 'xiaomi-book-pro16.png')
+        createItem('redmi-book-pro16', 'Redmi Book Pro 16', '/products/redmi-book-pro16', 'redmi-book-pro16.png', '1999元起'),
+        createItem('redmi-book-pro15', 'Redmi Book Pro 15', '/products/redmi-book-pro15', 'redmi-book-pro15.png', '1999元起'),
+        createItem('redmi-book-pro14', 'Redmi Book Pro 14', '/products/redmi-book-pro14', 'redmi-book-pro14.png', '1999元起'),
+        createItem('xiaomi-book-pro16', 'Xiaomi Book Pro 16', '/products/xiaomi-book-pro16', 'xiaomi-book-pro16.png', '1999元起')
       ]
     },
     {
       id: 'tablet',
       title: '平板',
       children: [
-        createItem('xiaomi-pad7-pro', 'Xiaomi Pad 7 Pro', '/products/xiaomi-pad7-pro', 'xiaomi-pad7-pro.png'),
-        createItem('xiaomi-pad7', 'Xiaomi Pad 7', '/products/xiaomi-pad7', 'xiaomi-pad7.png'),
-        createItem('xiaomi-pad6s-pro', 'Xiaomi Pad 6S Pro', '/products/xiaomi-pad6s-pro', 'xiaomi-pad6s-pro.png'),
-        createItem('xiaomi-pad6-pro', 'Xiaomi Pad 6 Pro', '/products/xiaomi-pad6-pro', 'xiaomi-pad6-pro.png')
+        createItem('xiaomi-pad7-pro', 'Xiaomi Pad 7 Pro', '/products/xiaomi-pad7-pro', 'xiaomi-pad7-pro.png', '1999元起'),
+        createItem('xiaomi-pad7', 'Xiaomi Pad 7', '/products/xiaomi-pad7', 'xiaomi-pad7.png', '1999元起'),
+        createItem('xiaomi-pad6s-pro', 'Xiaomi Pad 6S Pro', '/products/xiaomi-pad6s-pro', 'xiaomi-pad6s-pro.png', '1999元起'),
+        createItem('xiaomi-pad6-pro', 'Xiaomi Pad 6 Pro', '/products/xiaomi-pad6-pro', 'xiaomi-pad6-pro.png', '1999元起')
       ]
     },
     {
       id: 'home-appliances',
       title: '家电',
       children: [
-        createItem('air-conditioner', '空调', '/products/air-conditioner', 'air-conditioner.png'),
-        createItem('refrigerator', '冰箱', '/products/refrigerator', 'refrigerator.png'),
-        createItem('washing-machine', '洗衣机', '/products/washing-machine', 'washing-machine.png'),
-        createItem('vacuum-cleaner', '扫地机器人', '/products/vacuum-cleaner', 'vacuum-cleaner.png')
+        createItem('air-conditioner', '空调', '/products/air-conditioner', 'air-conditioner.png', '1999元起'),
+        createItem('refrigerator', '冰箱', '/products/refrigerator', 'refrigerator.png', '1999元起'),
+        createItem('washing-machine', '洗衣机', '/products/washing-machine', 'washing-machine.png', '1999元起'),
+        createItem('vacuum-cleaner', '扫地机器人', '/products/vacuum-cleaner', 'vacuum-cleaner.png', '1999元起')
       ]
     },
     {
       id: 'router',
       title: '路由器',
       children: [
-        createItem('ax9000', 'Xiaomi AX9000', '/products/ax9000', 'ax9000.png'),
-        createItem('ax6000', 'Xiaomi AX6000', '/products/ax6000', 'ax6000.png'),
-        createItem('ax3000', 'Xiaomi AX3000', '/products/ax3000', 'ax3000.png'),
-        createItem('ax1800', 'Xiaomi AX1800', '/products/ax1800', 'ax1800.png')
+        createItem('ax9000', 'Xiaomi AX9000', '/products/ax9000', 'ax9000.png', '1999元起'),
+        createItem('ax6000', 'Xiaomi AX6000', '/products/ax6000', 'ax6000.png', '1999元起'),
+        createItem('ax3000', 'Xiaomi AX3000', '/products/ax3000', 'ax3000.png', '1999元起'),
+        createItem('ax1800', 'Xiaomi AX1800', '/products/ax1800', 'ax1800.png', '1999元起')
       ]
     },
     {
       id: 'service-center',
-      title: '服务中心',
+      title: '服务中心',  
       children: [
         { id: 'after-sales', title: '售后服务', href: '/service/after-sales' },
         { id: 'repair-service', title: '维修服务', href: '/service/repair' },
@@ -202,23 +183,33 @@ export const DropdownNavBar: React.FC = () => {
 
         {/* 导航菜单 */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
-          {navMenuData.map((menuItem) => (
-            <div
-              key={menuItem.id}
-              onMouseEnter={() => setActiveMenuId(menuItem.id)}
-              style={{
-                color: '#333',
-                fontSize: '16px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                padding: '8px 0',
-                borderBottom: activeMenuId === menuItem.id ? '2px solid #ff6700' : '2px solid transparent',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              {menuItem.title}
-            </div>
-          ))}
+          {navMenuData.map((menuItem) => {
+            const isSimpleDropdown = menuItem.id === 'service-center' || menuItem.id === 'community'
+            if (isSimpleDropdown) {
+              return (
+                <div
+                  key={menuItem.id}
+                  onMouseEnter={() => setActiveMenuId(menuItem.id)}
+                  onMouseLeave={() => setActiveMenuId(null)}
+                  style={{
+                    ...navTitleTextStyle,
+                    borderBottom: activeMenuId === menuItem.id ? '2px solid #ff6700' : '2px solid transparent'
+                  }}
+                >
+                  {menuItem.title}
+                </div>
+              )
+            }
+            return (
+              <NavTitle
+                key={menuItem.id}
+                active={activeMenuId === menuItem.id}
+                onMouseEnter={() => setActiveMenuId(menuItem.id)}
+              >
+                {menuItem.title}
+              </NavTitle>
+            )
+          })}
         </div>
 
         {/* 搜索框 */}
@@ -268,50 +259,48 @@ export const DropdownNavBar: React.FC = () => {
           </div>
         </div>
         {/* 悬浮面板：横向 Menu */}
-        {activeMenuId && (
-          <div
-            style={{
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              top: 60,
-              backgroundColor: '#fff',
-              border: '1px solid #e8e8e8',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-              borderRadius: 12,
-              padding: '24px 28px',
-              zIndex: 1000,
-              minHeight: 300
-            }}
-            onMouseLeave={() => setActiveMenuId(null)}
-          >
-            {(() => {
-              const activeChildren = (navMenuData.find(g => g.id === activeMenuId)?.children || []) as unknown as { id: string | number; title: React.ReactNode }[]
-              const cols = Math.max(activeChildren.length, 1)
-              return (
-                <div className="mega-menu-scope" style={{ ['--cols' as unknown as string]: String(cols) }}>
+        {activeMenuId && activeMenuId !== 'service-center' && activeMenuId !== 'community' && (() => {
+          const activeChildren = (navMenuData.find(g => g.id === activeMenuId)?.children || []) as unknown as { id: string | number; title: React.ReactNode }[]
+          const isCardMode = activeChildren.some((c) => typeof (c as { title: unknown }).title !== 'string')
+          const cols = Math.max(activeChildren.length, 1)
+          return (
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: 60,
+                backgroundColor: '#fff',
+                border: '1px solid #e8e8e8',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                borderRadius: 12,
+                padding: isCardMode ? '24px 28px' : '10px 16px',
+                zIndex: 1000,
+                minHeight: isCardMode ? 250 : 40
+              }}
+              onMouseLeave={() => setActiveMenuId(null)}
+            >
+              {isCardMode ? (
+                <MegaMenu columns={cols} data={activeChildren} onClick={handleMenuItemClick} />
+              ) : (
+                <div className="simple-menu-scope">
                   <Menu
                     placement="horizontal"
                     // @ts-expect-error - HiUI type declarations issue
                     onClick={(id) => handleMenuItemClick(id as string | number)}
-                    style={{ width: '100%' }}
                     data={activeChildren}
                   />
-                  {/* 覆盖 Menu 内部样式：允许内容自适应高度、用网格等分一行 */}
                   <style>{`
-                    .mega-menu-scope .hi-v4-menu--horizontal { overflow: visible; background: transparent; }
-                    .mega-menu-scope .hi-v4-menu--horizontal .hi-v4-menu__wrapper { display: grid !important; grid-template-columns: repeat(var(--cols), 1fr); width: 100%; column-gap: 40px; }
-                    .mega-menu-scope .hi-v4-menu-item { padding: 0; height: auto; border-right: 1px solid #eee; }
-                    .mega-menu-scope .hi-v4-menu-item:last-child { border-right: none; }
-                    .mega-menu-scope .hi-v4-menu--horizontal .hi-v4-menu-item__inner { height: auto; border-bottom: none; align-items: stretch; }
-                    .mega-menu-scope .hi-v4-menu--horizontal .hi-v4-menu-item:hover .hi-v4-menu-item__inner { border-bottom: none; }
-                    .mega-menu-scope .hi-v4-menu-item__content { width: 100%; }
+                    .simple-menu-scope .hi-v4-menu--horizontal { background: transparent; }
+                    .simple-menu-scope .hi-v4-menu--horizontal .hi-v4-menu-item { height: 40px; padding: 0 12px; }
+                    .simple-menu-scope .hi-v4-menu--horizontal .hi-v4-menu-item__inner { height: 40px; border-bottom: none; }
+                    .simple-menu-scope .hi-v4-menu--horizontal .hi-v4-menu-item:hover .hi-v4-menu-item__inner { border-bottom: none; }
                   `}</style>
                 </div>
-              )
-            })()}
-          </div>
-        )}
+              )}
+            </div>
+          )
+        })()}
       </div>
     </div>
   )
