@@ -7,12 +7,27 @@ export const DropdownNavBar: React.FC = () => {
   const PLACEHOLDER = '/images/products/placeholder.svg'
   const [activeMenuId, setActiveMenuId] = React.useState<string | number | null>(null)
 
-  const renderTitle = (name: string, src?: string) => (
-    <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+  const renderTitle = (name: string, src?: string, subtitle?: string) => (
+    <div className="dropdown-card" style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 10,
+      width: 'clamp(160px, 14vw, 220px)',
+      padding: '12px 16px',
+      backgroundColor: '#fff'
+    }}>
       <img
         src={src || PLACEHOLDER}
         alt={name}
-        style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, backgroundColor: '#f5f5f5' }}
+        style={{
+          width: 'clamp(110px, 9vw, 160px)',
+          height: 'auto',
+          aspectRatio: '1 / 1',
+          objectFit: 'cover',
+          borderRadius: 8,
+          backgroundColor: '#f5f5f5'
+        }}
         onError={(e) => {
           const img = e.currentTarget as HTMLImageElement
           if (!img.src.includes('placeholder.svg')) {
@@ -20,15 +35,18 @@ export const DropdownNavBar: React.FC = () => {
           }
         }}
       />
-      <span>{name}</span>
-    </span>
+      <span style={{ color: '#333', fontSize: 14, textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%' }}>{name}</span>
+      {subtitle ? (
+        <span style={{ color: '#ff6700', fontSize: 14, fontWeight: 600 }}>{subtitle}</span>
+      ) : null}
+    </div>
   )
 
-  const createItem = (id: string, name: string, href: string, imageFile?: string): DropdownItem => ({
+  const createItem = (id: string, name: string, href: string, imageFile?: string, subtitle?: string): DropdownItem => ({
     id,
     href,
     imageUrl: imageFile ? `/images/products/${imageFile}` : undefined,
-    title: renderTitle(name, imageFile ? `/images/products/${imageFile}` : undefined)
+    title: renderTitle(name, imageFile ? `/images/products/${imageFile}` : undefined, subtitle)
   })
   // 导航菜单数据配置
   const navMenuData: DropdownItem[] = [
@@ -36,12 +54,12 @@ export const DropdownNavBar: React.FC = () => {
       id: 'xiaomi-phone',
       title: 'Xiaomi手机',
       children: [
-        createItem('mi17-pro-max', 'Xiaomi 17 Pro Max', '/products/mi17-pro-max', 'mi17-pro-max.jpg'),
-        createItem('mi17-pro', 'Xiaomi 17 Pro', '/products/mi17-pro', 'mi17-pro.png'),
-        createItem('mi17', 'Xiaomi 17', '/products/mi17', 'mi17.png'),
-        createItem('mi15s-pro', 'Xiaomi 15S Pro', '/products/mi15s-pro', 'mi15s-pro.png'),
-        createItem('civi5-pro', 'Xiaomi Civi 5 Pro', '/products/civi5-pro', 'civi5-pro.png'),
-        createItem('mix-flip2', 'Xiaomi MIX Flip 2', '/products/mix-flip2', 'mix-flip2.png')
+        createItem('mi17-pro-max', 'Xiaomi 17 Pro Max', '/products/mi17-pro-max', 'mi17-pro-max.jpg', '5999元起'),
+        createItem('mi17-pro', 'Xiaomi 17 Pro', '/products/mi17-pro', 'mi17-pro.png', '4999元起'),
+        createItem('mi17', 'Xiaomi 17', '/products/mi17', 'mi17.png', '4499元起'),
+        createItem('mix-flip2', 'Xiaomi MIX Flip 2', '/products/mix-flip2', 'mix-flip2.png', '5999元起'),
+        createItem('mi15s-pro', 'Xiaomi 15S Pro', '/products/mi15s-pro', 'mi15s-pro.png', '5499元起'),
+        createItem('civi5-pro', 'Xiaomi Civi 5 Pro', '/products/civi5-pro', 'civi5-pro.png', '2999元起')
       ]
     },
     {
@@ -260,18 +278,38 @@ export const DropdownNavBar: React.FC = () => {
               backgroundColor: '#fff',
               border: '1px solid #e8e8e8',
               boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-              borderRadius: 8,
-              padding: '12px 16px',
-              zIndex: 1000
+              borderRadius: 12,
+              padding: '24px 28px',
+              zIndex: 1000,
+              minHeight: 300
             }}
             onMouseLeave={() => setActiveMenuId(null)}
           >
-            <Menu
-              placement="horizontal"
-              // @ts-expect-error - HiUI type declarations issue
-              onClick={(id) => handleMenuItemClick(id as string | number)}
-              data={(navMenuData.find(g => g.id === activeMenuId)?.children || []) as unknown as { id: string | number; title: React.ReactNode }[]}
-            />
+            {(() => {
+              const activeChildren = (navMenuData.find(g => g.id === activeMenuId)?.children || []) as unknown as { id: string | number; title: React.ReactNode }[]
+              const cols = Math.max(activeChildren.length, 1)
+              return (
+                <div className="mega-menu-scope" style={{ ['--cols' as unknown as string]: String(cols) }}>
+                  <Menu
+                    placement="horizontal"
+                    // @ts-expect-error - HiUI type declarations issue
+                    onClick={(id) => handleMenuItemClick(id as string | number)}
+                    style={{ width: '100%' }}
+                    data={activeChildren}
+                  />
+                  {/* 覆盖 Menu 内部样式：允许内容自适应高度、用网格等分一行 */}
+                  <style>{`
+                    .mega-menu-scope .hi-v4-menu--horizontal { overflow: visible; background: transparent; }
+                    .mega-menu-scope .hi-v4-menu--horizontal .hi-v4-menu__wrapper { display: grid !important; grid-template-columns: repeat(var(--cols), 1fr); width: 100%; column-gap: 40px; }
+                    .mega-menu-scope .hi-v4-menu-item { padding: 0; height: auto; border-right: 1px solid #eee; }
+                    .mega-menu-scope .hi-v4-menu-item:last-child { border-right: none; }
+                    .mega-menu-scope .hi-v4-menu--horizontal .hi-v4-menu-item__inner { height: auto; border-bottom: none; align-items: stretch; }
+                    .mega-menu-scope .hi-v4-menu--horizontal .hi-v4-menu-item:hover .hi-v4-menu-item__inner { border-bottom: none; }
+                    .mega-menu-scope .hi-v4-menu-item__content { width: 100%; }
+                  `}</style>
+                </div>
+              )
+            })()}
           </div>
         )}
       </div>
