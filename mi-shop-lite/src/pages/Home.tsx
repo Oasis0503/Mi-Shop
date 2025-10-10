@@ -1,9 +1,11 @@
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
-import { ProductCarousel, type CarouselImage } from '../components'
+// @ts-expect-error - HiUI type declarations issue
+import Carousel from '@hi-ui/carousel'
 
 export default function Home() {
-  const carouselImages: CarouselImage[] = [
+  // 轮播图片数据
+  const carouselImages = [
     {
       id: 'carousel-phone',
       src: '/images/carousel/phone.jpg',
@@ -64,19 +66,49 @@ export default function Home() {
         {/* 轮播图片 - 整个组件向右偏移 */}
         <div style={{ 
           marginBottom: '48px',
-          marginLeft: '400px'  // 整个轮播图组件向右偏移300px
+          marginLeft: '400px',  // 整个轮播图组件向右偏移400px
+          height: '500px',
+          borderRadius: '8px',
+          overflow: 'hidden'
         }}>
-          <ProductCarousel
-            images={carouselImages}
-            autoPlay={true}
-            interval={4000}
-            showDots={true}
-            showArrows={true}
-            style={{
-              height: '500px'
-              // 不设置width，保持组件原来的完整宽度
-            }}
-          />
+          <Carousel
+            duration={4000}        // 自动切换间隔4秒
+            showDots={true}        // 显示分页指示器
+            showArrows={true}      // 显示箭头指示器
+            defaultActive={0}      // 默认激活第一张图片
+            style={{ height: '100%' }}
+          >
+            {carouselImages.map((image) => (
+              <div
+                key={image.id}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  if (image.href) {
+                    window.location.href = image.href
+                  }
+                }}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block'
+                  }}
+                  onError={(e) => {
+                    const img = e.currentTarget as HTMLImageElement
+                    img.src = '/images/products/placeholder.svg'
+                  }}
+                />
+              </div>
+            ))}
+          </Carousel>
         </div>
 
       </div>
