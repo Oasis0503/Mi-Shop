@@ -4,9 +4,16 @@ import Menu from "@hi-ui/menu"
 import { NavTitle } from './NavTitle'
 import { MegaMenu } from './MegaMenu'
 import { useNavMenu } from '../hooks/useNavMenu'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
 export const DropdownNavBar: React.FC = () => {
+  const isDesktop = useMediaQuery('(min-width: 1250px)')
   const { activeMenuId, setActiveMenuId, navMenuData, handleMenuItemClick, isSimpleDropdown } = useNavMenu()
+
+  // 如果屏幕宽度小于1250px，不渲染组件
+  if (!isDesktop) {
+    return null
+  }
 
   return (
     <div className="dropdown-navbar" style={{ position: 'relative' }}>
